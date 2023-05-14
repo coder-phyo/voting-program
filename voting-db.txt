@@ -1,0 +1,7 @@
+James^1^1 vinnie#*
+Alex^1^1 vinnie#*
+John^2^2 vinnie#vinnie#*
+Ronaldo^4^4 vinnie#vinnie#vinnie#vinnie#*
+Messi^2^2 vinnie#vinnie#*
+===
+vinnie^vi@gmail.com^75370^mdy^0^0^123^
