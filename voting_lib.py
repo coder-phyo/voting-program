@@ -1,3 +1,6 @@
+import ast
+
+
 class Voting:
 
     def __init__(self):
@@ -57,7 +60,7 @@ class Voting:
             self.id = len(self.db)
             data_form: dict = {self.id:{"name": r_name,"email": r_email,"phone": r_phone,"address": r_address,"show_money": 5000,"points": 0,"password": r_pass1}}
             self.db.update(data_form)
-        print(self.db)
+
         option_check = False
         while option_check is False:
             try:
@@ -184,46 +187,38 @@ class Voting:
     def recording_all_data(self):
         with open("voting-db.txt",'w') as db:
             for i in range(len(self.students)):
-                s_name = self.students[i]["name"]
-                v_mark = self.students[i]["v_mark"]
-                voter = self.students[i]["voter"]
-                s_points = self.students[i]["points"]
-                student_form = s_name + '^' + str(v_mark) + '^'+ str(s_points) + '^'
-                db.write(student_form)
-                # db.write('\n')
-                for v in voter:
-                    db.write(v+"#")
+                db.write(str(self.students[i])+'^')
                 db.write('\n')
 
-            # db.write('STUDENTS&USERS')
-            # db.write('\n')
+            db.write('===')
+            db.write('\n')
 
             for i in range(len(self.db)):
-                u_name = self.db[i]["name"]
-                email = self.db[i]["email"]
-                phone = self.db[i]["phone"]
-                address = self.db[i]["address"]
-                show_money = self.db[i]["show_money"]
-                u_points = self.db[i]["points"]
-                password = self.db[i]["password"]
-                user_form = u_name + '^' + email + '^' + str(phone) + '^' + address + '^' + str(show_money) + '^' + str(u_points) + '^' + password + '^'
-
-                print(user_form)
-                db.write(user_form)
+                db.write(str(self.db[i])+'^')
                 db.write('\n')
 
-    def loading_all_data(self):
-        voting_txt = ""
-        with open("voting-db.txt",'r') as db:
-            datas = db.readlines()
-            # print(datas)
-            for i in datas:
-               item = i.replace('\n','')
-               voting_txt += item.ljust(1)
 
-        print(voting_txt)
-        container = voting_txt.split('===')
-        db_students = container[0].split('*')
-        db_students.pop(len(db_students) - 1)
-        for i in db_students:
-            print(i.split(' '))
+    def loading_all_data(self):
+        if len(self.db) != 0:
+            voting_txt = ""
+            with open("voting-db.txt", 'r') as db:
+                datas = db.readlines()
+                for i in datas:
+                    i = i.replace('\n', '')
+                    voting_txt += i.ljust(1)
+
+            voting_txt = voting_txt.split('===')
+            db_students = voting_txt[0].split('^')
+            db_students.pop(len(db_students) - 1)
+            self.students = {}
+            for student in db_students:
+                self.id = len(self.students)
+                data_form = {self.id: ast.literal_eval(student)}
+                self.students.update(data_form)
+
+            db_users = voting_txt[1].split('^')
+            db_users.pop(len(db_users) - 1)
+            for user in db_users:
+                self.id = len(self.db)
+                data_form = {self.id: ast.literal_eval(user)}
+                self.db.update(data_form)
